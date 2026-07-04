@@ -69,7 +69,15 @@ class DatabaseFactory
                     );
                     
                     if (empty($url) || empty($key)) {
-                        $dbType = 'mysql';
+                        $isVercel = !empty(getenv('VERCEL')) || !empty($_SERVER['VERCEL']) || !empty($_ENV['VERCEL']) || isset($_SERVER['NOW_REGION']);
+                        if ($isVercel) {
+                            $missing = [];
+                            if (empty($url)) $missing[] = 'SUPABASE_URL';
+                            if (empty($key)) $missing[] = 'SUPABASE_KEY';
+                            throw new RuntimeException("Erreur de configuration critique sur Vercel : Variables d'environnement manquantes dans le tableau de bord Vercel : " . implode(', ', $missing) . ". Veuillez vous assurer d'avoir correctement ajoute ces variables dans Vercel.");
+                        } else {
+                            $dbType = 'mysql';
+                        }
                     }
                     break;
             }

@@ -22,6 +22,9 @@ if (file_exists(__DIR__ . '/.env')) {
     }
 }
 
+$isVercel = !empty(getenv('VERCEL')) || !empty($_SERVER['VERCEL']) || !empty($_ENV['VERCEL']) || isset($_SERVER['NOW_REGION']);
+$defaultDbType = $isVercel ? 'supabase' : 'mysql';
+
 return [
     // === TYPE DE BASE DE DONNÉES ===
     // 'mysql' pour l'ancienne base (local)
@@ -29,7 +32,7 @@ return [
     'db_type' => (getenv('DB_TYPE') ?: ($_SERVER['DB_TYPE'] ?? ($_ENV['DB_TYPE'] ?? null))) ?: 
                  (((getenv('SUPABASE_URL') ?: ($_SERVER['SUPABASE_URL'] ?? ($_ENV['SUPABASE_URL'] ?? null))) || 
                    (getenv('SUPABASE_KEY') ?: ($_SERVER['SUPABASE_KEY'] ?? ($_ENV['SUPABASE_KEY'] ?? null))) || 
-                   (getenv('SUPABASE_ANON_KEY') ?: ($_SERVER['SUPABASE_ANON_KEY'] ?? ($_ENV['SUPABASE_ANON_KEY'] ?? null)))) ? 'supabase' : 'mysql'),
+                   (getenv('SUPABASE_ANON_KEY') ?: ($_SERVER['SUPABASE_ANON_KEY'] ?? ($_ENV['SUPABASE_ANON_KEY'] ?? null)))) ? 'supabase' : $defaultDbType),
     
     // === CONFIGURATION SUPABASE ===
     'supabase_url' => getenv('SUPABASE_URL') ?: ($_SERVER['SUPABASE_URL'] ?? ($_ENV['SUPABASE_URL'] ?? '')),
