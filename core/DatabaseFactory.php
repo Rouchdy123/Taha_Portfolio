@@ -46,8 +46,8 @@ class DatabaseFactory
         if (self::$instance === null) {
             $config = require __DIR__ . '/../config.php';
             
-            // Détection du type de DB via config ou variable d'environnement
-            $dbType = getenv('DB_TYPE') ?: $config['db_type'] ?: 'mysql';
+            // Détection du type de DB via config ou variable d'environnement (avec fallback $_SERVER et $_ENV)
+            $dbType = getenv('DB_TYPE') ?: ($_SERVER['DB_TYPE'] ?? ($_ENV['DB_TYPE'] ?? ($config['db_type'] ?? 'mysql')));
             
             switch ($dbType) {
                 case 'supabase':

@@ -26,12 +26,15 @@ return [
     // === TYPE DE BASE DE DONNÉES ===
     // 'mysql' pour l'ancienne base (local)
     // 'supabase' pour la nouvelle base (cloud)
-    'db_type' => getenv('DB_TYPE') ?: ((getenv('SUPABASE_URL') || getenv('SUPABASE_KEY') || getenv('SUPABASE_ANON_KEY')) ? 'supabase' : 'mysql'),
+    'db_type' => (getenv('DB_TYPE') ?: ($_SERVER['DB_TYPE'] ?? ($_ENV['DB_TYPE'] ?? null))) ?: 
+                 (((getenv('SUPABASE_URL') ?: ($_SERVER['SUPABASE_URL'] ?? ($_ENV['SUPABASE_URL'] ?? null))) || 
+                   (getenv('SUPABASE_KEY') ?: ($_SERVER['SUPABASE_KEY'] ?? ($_ENV['SUPABASE_KEY'] ?? null))) || 
+                   (getenv('SUPABASE_ANON_KEY') ?: ($_SERVER['SUPABASE_ANON_KEY'] ?? ($_ENV['SUPABASE_ANON_KEY'] ?? null)))) ? 'supabase' : 'mysql'),
     
     // === CONFIGURATION SUPABASE ===
-    'supabase_url' => getenv('SUPABASE_URL') ?: '',
-    'supabase_key' => getenv('SUPABASE_KEY') ?: getenv('SUPABASE_ANON_KEY') ?: '',
-    'supabase_auth_token' => getenv('SUPABASE_AUTH_TOKEN') ?: getenv('SUPABASE_SERVICE_ROLE_KEY') ?: null,
+    'supabase_url' => getenv('SUPABASE_URL') ?: ($_SERVER['SUPABASE_URL'] ?? ($_ENV['SUPABASE_URL'] ?? '')),
+    'supabase_key' => getenv('SUPABASE_KEY') ?: ($_SERVER['SUPABASE_KEY'] ?? ($_ENV['SUPABASE_KEY'] ?? (getenv('SUPABASE_ANON_KEY') ?: ($_SERVER['SUPABASE_ANON_KEY'] ?? ($_ENV['SUPABASE_ANON_KEY'] ?? ''))))),
+    'supabase_auth_token' => getenv('SUPABASE_AUTH_TOKEN') ?: ($_SERVER['SUPABASE_AUTH_TOKEN'] ?? ($_ENV['SUPABASE_AUTH_TOKEN'] ?? (getenv('SUPABASE_SERVICE_ROLE_KEY') ?: ($_SERVER['SUPABASE_SERVICE_ROLE_KEY'] ?? ($_ENV['SUPABASE_SERVICE_ROLE_KEY'] ?? null))))),
     
     // === CONFIGURATION MYSQL (LEGACY - GARDÉE POUR ROLLBACK) ===
     'db_host' => '127.0.0.1',
