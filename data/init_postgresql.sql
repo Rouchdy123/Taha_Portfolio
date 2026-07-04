@@ -1,8 +1,6 @@
 -- Schéma PostgreSQL pour Supabase
 -- Converti depuis MySQL (data/init.sql)
 
--- Désactiver les triggers
-SET session_replication_role = 'replica';
 
 -- Table settings
 CREATE TABLE IF NOT EXISTS settings (
@@ -110,8 +108,6 @@ CREATE TABLE IF NOT EXISTS inbox_messages (
     is_replied BOOLEAN DEFAULT FALSE
 );
 
--- Réactiver les triggers
-SET session_replication_role = 'DEFAULT';
 
 -- Données initiales
 INSERT INTO settings (key, value) VALUES
