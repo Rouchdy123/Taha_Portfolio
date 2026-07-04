@@ -1,3 +1,4 @@
 # Ignore uploads and local config
 assets/uploads/
 *.log
+.env
